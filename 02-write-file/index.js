@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const pathFile = path.join(__dirname, '/text.txt');
-const readSteam = fs.createWriteStream(pathFile);
+const writeSteam = fs.createWriteStream(pathFile);
 
 const {
   stdin: input,
@@ -11,20 +11,20 @@ const {
 } = require('process');
 
 
-output.write('Привет, студент!\n');
+output.write('Hello, student!\nEnter the text\n');
 
 const rl = readline.createInterface({ input, output });
 
 rl.on('line', (input) => {
   if (input === 'exit') {
-    output.write('Удачи в изучении Node.js!');
+    output.write('Good luck learning Node.js!');
     rl.close();
   } else {
-    readSteam.write(input + '\n');
+    writeSteam.write(input + '\n');
   }
 });
 
 rl.on('SIGINT', () => {
-  output.write('Удачи в изучении Node.js!');
+  output.write('Good luck learning Node.js!');
   rl.close();
 });
