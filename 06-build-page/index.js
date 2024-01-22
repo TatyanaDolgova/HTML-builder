@@ -60,27 +60,35 @@ function copyAssets() {
   let folderPath = (path.join(__dirname, 'assets'));
   let newFolderPath = (path.join(__dirname, 'project-dist', 'assets'));
 
+  fs.rm(newFolderPath, { recursive: true }, () => {
 
-  fs.promises.mkdir(newFolderPath, { recursive: true });
-  fs.promises.readdir(folderPath, { withFileTypes: true })
-    .then(foldernames => {
-      for (let foldername of foldernames) {
-        if (foldername.isDirectory()) {
-          fs.promises.mkdir(path.join(newFolderPath, foldername.name), { recursive: true });
-          const folderInternalPath = path.join(folderPath, foldername.name);
-          const newFolderInternalPath = path.join(newFolderPath, foldername.name);
+    fs.promises.mkdir(newFolderPath, { recursive: true });
 
-          fs.promises.readdir(path.join(folderInternalPath), { withFileTypes: true })
-            .then(filenames => {
-              for (let filename of filenames) {
-                const filePath = (path.join(folderInternalPath, filename.name));
-                const newFilePath = (path.join(newFolderInternalPath, filename.name));
-                fs.promises.copyFile(filePath, newFilePath);
-              }
-            });
+    fs.promises.readdir(folderPath, { withFileTypes: true })
+      .then(foldernames => {
+
+        for (let foldername of foldernames) {
+          if (foldername.isDirectory()) {
+            fs.promises.mkdir(path.join(newFolderPath, foldername.name), { recursive: true });
+
+            const folderInternalPath = path.join(folderPath, foldername.name);
+            const newFolderInternalPath = path.join(newFolderPath, foldername.name);
+
+            fs.promises.readdir(path.join(folderInternalPath), { withFileTypes: true })
+              .then(filenames => {
+                for (let filename of filenames) {
+                  const filePath = (path.join(folderInternalPath, filename.name));
+                  const newFilePath = (path.join(newFolderInternalPath, filename.name));
+
+                  fs.promises.copyFile(filePath, newFilePath);
+                }
+              });
+          }
         }
-      }
-    });
+      });
+  })
+
+
 }
 
 copyAssets();
